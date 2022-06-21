@@ -1,13 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ChakraProvider, ColorModeScript, extendTheme } from "@chakra-ui/react";
+import theme from "./theme";
+import { BrowserRouter as Router } from "react-router-dom";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  useQuery,
+  gql,
+} from "@apollo/client";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const extendedTheme = extendTheme({});
+const client = new ApolloClient({
+  uri: "http://localhost:8000/graphql/",
+  cache: new InMemoryCache(),
+});
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <ChakraProvider theme={extendedTheme}>
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <ApolloProvider client={client}>
+          <App />
+        </ApolloProvider>
+      </ChakraProvider>
+    </Router>
   </React.StrictMode>
 );
 
